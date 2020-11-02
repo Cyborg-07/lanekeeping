@@ -73,12 +73,13 @@ int main() {
     OpenImage(mask_img, NIL, NIL, NIL, Ellipse, 10, 6, open_img);
     SaveImageToJpeg(open_img,"/home/anvar/Downloads/open_img", NIL, false);
 
-
-    //SaveImageToJpeg(vizualized_img,"/home/anvar/Downloads/vizualized_img", NIL, false);
-    //SaveImageToJpeg(score_img,"/home/anvar/Downloads/score_img", NIL, false);
-
     /// DETECTING LINES
     DetectLines(open_img, down_half, 1.0f, 10.0f, 30.0f, 30.f, 30.0f, lines, scores);
+
+    Image outEdges_im;
+    Image canny_img;
+    DetectEdges(clahe_img, down_half, avl::EdgeFilter::Canny, 2.0f, NIL, 15.0f, 5.0f, 0.0f, 1, outEdges_im, canny_img);
+    SaveImageToJpeg(outEdges_im,"/home/anvar/Downloads/outEdges_img", NIL, false);
 
     
     /// рисуем
