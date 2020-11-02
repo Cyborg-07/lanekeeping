@@ -5,6 +5,7 @@ using namespace avl;
 using namespace std;
 using namespace atl;
 using namespace avs;
+using namespace KernelShape;
 
 auto LinesArray(Array<Line2D>& lines)
 {
@@ -25,15 +26,7 @@ int main() {
 
     Image bw_img;
 
-    //EqualizeImageHistogram(img, atl::NIL ,0.8, 0.8, img2);
-
-    //DetectLinePeak(img, avl::LinePeakDetectionMethod::MaximalPixel, 128.0f, );
-
-
-    //SelectChannel(img, NIL, 2, img2);
-
     AverageChannels(img, NIL,bw_img);
-
     SaveImageToJpeg(bw_img,"/home/anvar/Downloads/bw_img", NIL, false);
 
     Image clahe_img;
@@ -46,9 +39,6 @@ int main() {
     //NormalizeLocalContrast(bw_img, NIL, 128.0f, 90.0f, 1, 0.1f, norm_img);
     //SaveImageToJpeg(norm_img,"/home/anvar/Downloads/norm_img", NIL, false);
 
-    Image mask_img;
-    ThresholdImage(clahe_img, NIL, 150.0f, 230.0f, 0.0f, mask_img);
-    SaveImageToJpeg(mask_img,"/home/anvar/Downloads/mask_img", NIL, false);
 
     Array<Line2D> lines;
     Array<float> scores;
@@ -64,14 +54,34 @@ int main() {
     Region down_half;
     CreateRectangleRegion(r,NIL,W,H,down_half,NIL);
 
-    DetectLines(clahe_img, down_half, 1.0f, 20.0f, 40.0f, 40.f, 10.0f, lines, scores);
+
+
+    ///// сглаживание изображения
+    Image smooth_img;
+    DilateImage(bw_img, down_half, NIL, NIL, Ellipse, 5, NIL, smooth_img);
+    SaveImageToJpeg(smooth_img,"/home/anvar/Downloads/smooth_img", NIL, false);
+
+    /// строим маску
+    Image mask_img;
+    ThresholdImage(smooth_img, NIL, 180.0f, 255.0f, 70.0f, mask_img);
+    SaveImageToJpeg(mask_img,"/home/anvar/Downloads/mask_img", NIL, false);
+
+
+    ////// убираем маленькие яркие точки с помощью OpenImage
+
+    Image open_img;
+    OpenImage(mask_img, NIL, NIL, NIL, Ellipse, 10, 6, open_img);
+    SaveImageToJpeg(open_img,"/home/anvar/Downloads/open_img", NIL, false);
+
 
     //SaveImageToJpeg(vizualized_img,"/home/anvar/Downloads/vizualized_img", NIL, false);
     //SaveImageToJpeg(score_img,"/home/anvar/Downloads/score_img", NIL, false);
 
+    /// DETECTING LINES
+    DetectLines(open_img, down_half, 1.0f, 10.0f, 30.0f, 30.f, 30.0f, lines, scores);
 
-
-
+    
+    /// рисуем
     Image lines_img;
     Pixel pix;
     AvsFilter_MakePixel(1,0,0,1,pix);
@@ -79,8 +89,6 @@ int main() {
     drwstl.thickness = 5;
     drwstl.filled = true;
     drwstl.opacity = 1;
-    //drwstl.DrawingMode(DrawingMode::HighQuality);
-    //=(DrawingMode: HighQuality Opacity: 1.0f Thickness: 1.0f Filled: False PointShape: NIL PointSize: 1.0f)
     DrawLines_SingleColor(img, LinesArray(lines), NIL, pix , drwstl, true, lines_img);
     SaveImageToJpeg(lines_img,"/home/anvar/Downloads/lines_img", NIL, false);
 
