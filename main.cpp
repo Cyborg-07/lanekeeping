@@ -102,7 +102,7 @@ int main() {
     SaveImageToJpeg(lines_img,"/home/anvar/Downloads/img7_lines", NIL, false);
     DrawLines_SingleColor(img, LinesArray(lines), NIL, pix , drwstl, true, img);
     SaveImageToJpeg(img,"/home/anvar/Downloads/img8_lines", NIL, false);
-
+ //IS COMMITED
 
     lines[0].a +=10;
 
