@@ -1,0 +1,5 @@
+/home/anvar/Downloads/clion-2020.2.4/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/anvar/CLionProjects/untitled
+-- AVL found in: /opt/AdaptiveVision/AVL-x86_64-4.12.13
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/anvar/CLionProjects/untitled/cmake-build-debug
