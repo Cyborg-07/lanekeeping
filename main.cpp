@@ -102,34 +102,34 @@ int main() {
 
 
 
-    Array<Line2D> *new_lines = new Array<Line2D>(5);
+    Array<Line2D> new_lines(10);
 
-    for (auto i:lines)
-    {
-        if ((abs(i.a/i.b) > 0.95) && (abs(i.a/i.b) < 1.3))
-        {
-            cout <<"tan = "<< abs(i.a/i.b) <<endl;
-            DrawLine(lines_img, i, NIL, pix, drwstl);
-            DrawLine(img, i, NIL, pix, drwstl);
-            // НЕ РИСУЕТ В ЦИКЛЕ! ХЗ ПОЧЕМУ, ОШИБОК.NET
-        }
-    }
-
-
-
-//    for (int i=0; i<lines.Size(); i++)
+//    for (auto i:lines)
 //    {
-//        if ((abs(lines[i].a/lines[i].b) > 0.95) && (abs(lines[i].a/lines[i].b) < 1.3) )
+//        if ((abs(i.a/i.b) > 0.95) && (abs(i.a/i.b) < 1.3))
 //        {
-//            cout <<"tan = "<< abs(lines[i].a/lines[i].b) <<endl;
-//            new_lines->Insert(i, lines[i]);
+//            cout <<"tan = "<< abs(i.a/i.b) <<endl;
+//            DrawLine(lines_img, i, NIL, pix, drwstl);
+//            DrawLine(img, i, NIL, pix, drwstl);
+//            // НЕ РИСУЕТ В ЦИКЛЕ! ХЗ ПОЧЕМУ, ОШИБОК.NET
 //        }
 //    }
 
-//    DrawLines_SingleColor(outedges_img, LinesArray(lines), NIL, pix , drwstl, true, lines_img);
-//    SaveImageToJpeg(lines_img,"/home/anvar/Downloads/img7_lines", NIL, false);
-//    DrawLines_SingleColor(img, LinesArray(lines), NIL, pix , drwstl, true, img);
-//    SaveImageToJpeg(img,"/home/anvar/Downloads/img8_lines", NIL, false);
+
+
+    for (int i=0; i<lines.Size(); i++)
+    {
+        if ((abs(lines[i].a/lines[i].b) > 0.95) && (abs(lines[i].a/lines[i].b) < 1.3) )
+        {
+            cout <<"tan = "<< abs(lines[i].a/lines[i].b) <<endl;
+            new_lines.Insert(i, lines[i]);
+        }
+    }
+
+    DrawLines_SingleColor(outedges_img, LinesArray(new_lines), NIL, pix , drwstl, true, lines_img);
+    SaveImageToJpeg(lines_img,"/home/anvar/Downloads/img7_lines", NIL, false);
+    DrawLines_SingleColor(img, LinesArray(new_lines), NIL, pix , drwstl, true, img);
+    SaveImageToJpeg(img,"/home/anvar/Downloads/img8_lines", NIL, false);
 
 
     return 0;
