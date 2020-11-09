@@ -20,13 +20,13 @@ int main() {
 
 #pragma region norm
     Image img;
-    LoadImage("/home/anvar/Downloads/images/img3.jpg",false, img);
+    LoadImage("/home/anvar/Downloads/images/img2.jpg",false, img);
 
     int H = img.Height();
     int W = img.Width();
 
     //Rectangle2D r({0,H/2},0,W,H/2);
-    Rectangle2D r({W*0.2f,H/2},0,W*0.6f,H/2*0.9f);
+    Rectangle2D r({W*0.2f,3*H/5},0,W*0.6f,H/2*0.9f);
     Region down_half;
     CreateRectangleRegion(r,NIL,W,H,down_half,NIL);
 
@@ -92,12 +92,12 @@ int main() {
     Pixel pix;
     AvsFilter_MakePixel(255,0,0,255,pix);
     DrawingStyle drwstl;
-    drwstl.thickness = 5;
+    drwstl.thickness = 15;
     drwstl.filled = true;
     drwstl.opacity = 1;
 
     //auto lines_ = LinesArray(lines);
-    DetectLines(outedges_img, down_half, 0.5f, 20.0f, 40.0f, 20.0f, 20.0f, lines, scores);
+    DetectLines(outedges_img, down_half, 0.5f, 20.0f, 90.0f, 20.0f, 20.0f, lines, scores);
     //DetectLines(outedges_img, down_half, 0.5f, 20.0f, 60.0f, 40.0f, 10.0f, lines, scores);
 
 
@@ -125,6 +125,7 @@ int main() {
             new_lines.Insert(i, lines[i]);
         }
     }
+
 
     DrawLines_SingleColor(outedges_img, LinesArray(new_lines), NIL, pix , drwstl, true, lines_img);
     SaveImageToJpeg(lines_img,"/home/anvar/Downloads/img7_lines", NIL, false);
