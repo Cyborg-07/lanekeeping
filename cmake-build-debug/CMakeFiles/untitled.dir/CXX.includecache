@@ -9,6 +9,8 @@
 /home/anvar/CLionProjects/untitled/main.cpp
 AVL.h
 /home/anvar/CLionProjects/untitled/AVL.h
+iostream
+-
 
 /opt/AdaptiveVision/AVL-x86_64-4.12.13/include/ATL/Array.h
 Utils.h

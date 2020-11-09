@@ -1,4 +1,5 @@
 #include "AVL.h"
+#include <iostream>
 
 using namespace avl;
 using namespace std;
@@ -19,7 +20,7 @@ int main() {
 
 #pragma region norm
     Image img;
-    LoadImage("/home/anvar/Downloads/images/img2.jpg",false, img);
+    LoadImage("/home/anvar/Downloads/images/img3.jpg",false, img);
 
     int H = img.Height();
     int W = img.Width();
@@ -41,7 +42,7 @@ int main() {
 #pragma endregion norm
     // сглаживание изображения
     Image smooth_img;
-    DilateImage(bw_img, down_half, NIL, NIL, Ellipse, 3, NIL, smooth_img);
+    DilateImage(clahe_img, down_half, NIL, NIL, Ellipse, 3, NIL, smooth_img);
     SaveImageToJpeg(smooth_img,"/home/anvar/Downloads/img2_smooth", NIL, false);
 
 
@@ -58,7 +59,9 @@ int main() {
 
 //TODO поменять коэффициенты
     ThresholdImage_HSx(hsl_img, down_half, HSxColorModel::Type::HSL, 0, 255, 160, 255, 140, 255, 2, yellow_img);
+    //ThresholdImage_HSx(hsl_img, down_half, HSxColorModel::Type::HSL, 0, 255, 160, 255, 110, 255, 2, yellow_img);
     ThresholdImage_HSx(hsl_img, down_half, HSxColorModel::Type::HSL, 0, 255, 0, 210, 170, 255, 2, white_img);
+    //ThresholdImage_HSx(hsl_img, down_half, HSxColorModel::Type::HSL, 0, 255, 0, 210, 100, 255, 2, white_img);
 
 
     AddImages(yellow_img, white_img, down_half, 1.0f, yw_img);
@@ -76,6 +79,7 @@ int main() {
 
     Image final_img;
     DetectEdges(final_mask, down_half, avl::EdgeFilter::Canny, 2.0f, NIL, 15.0f, 5.0f, 0.0f, 1, outedges_img, canny_img);
+    //DetectEdges(final_mask, down_half, avl::EdgeFilter::Canny, 2.5, NIL, 20.0f, 30.0f, 1.0f, 1, outedges_img, canny_img);
     SaveImageToJpeg(outedges_img,"/home/anvar/Downloads/img6_outedges", NIL, false);
 
 
@@ -93,17 +97,40 @@ int main() {
     drwstl.opacity = 1;
 
     //auto lines_ = LinesArray(lines);
-   // DetectLines(outedges_img, down_half, 0.5f, 20.0f, 40.0f, 20.0f, 20.0f, lines, scores);
-    DetectLines(outedges_img, down_half, 0.5f, 10.0f, 40.0f, 10.0f, 0.0f, lines, scores);
+    DetectLines(outedges_img, down_half, 0.5f, 20.0f, 40.0f, 20.0f, 20.0f, lines, scores);
+    //DetectLines(outedges_img, down_half, 0.5f, 20.0f, 60.0f, 40.0f, 10.0f, lines, scores);
 
-    //lines[0].a -=0.01;
 
-    DrawLines_SingleColor(outedges_img, LinesArray(lines), NIL, pix , drwstl, true, lines_img);
-    SaveImageToJpeg(lines_img,"/home/anvar/Downloads/img7_lines", NIL, false);
-    DrawLines_SingleColor(img, LinesArray(lines), NIL, pix , drwstl, true, img);
-    SaveImageToJpeg(img,"/home/anvar/Downloads/img8_lines", NIL, false);
 
-    lines[0].a +=10;
+    Array<Line2D> *new_lines = new Array<Line2D>(5);
+
+    for (auto i:lines)
+    {
+        if ((abs(i.a/i.b) > 0.95) && (abs(i.a/i.b) < 1.3))
+        {
+            cout <<"tan = "<< abs(i.a/i.b) <<endl;
+            DrawLine(lines_img, i, NIL, pix, drwstl);
+            DrawLine(img, i, NIL, pix, drwstl);
+            // НЕ РИСУЕТ В ЦИКЛЕ! ХЗ ПОЧЕМУ, ОШИБОК.NET
+        }
+    }
+
+
+
+//    for (int i=0; i<lines.Size(); i++)
+//    {
+//        if ((abs(lines[i].a/lines[i].b) > 0.95) && (abs(lines[i].a/lines[i].b) < 1.3) )
+//        {
+//            cout <<"tan = "<< abs(lines[i].a/lines[i].b) <<endl;
+//            new_lines->Insert(i, lines[i]);
+//        }
+//    }
+
+//    DrawLines_SingleColor(outedges_img, LinesArray(lines), NIL, pix , drwstl, true, lines_img);
+//    SaveImageToJpeg(lines_img,"/home/anvar/Downloads/img7_lines", NIL, false);
+//    DrawLines_SingleColor(img, LinesArray(lines), NIL, pix , drwstl, true, img);
+//    SaveImageToJpeg(img,"/home/anvar/Downloads/img8_lines", NIL, false);
+
 
     return 0;
 }
